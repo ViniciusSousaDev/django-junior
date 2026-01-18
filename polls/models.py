@@ -12,17 +12,16 @@ class Question(models.Model):
         return self.question_text
 
     def was_published_recently(self):
+        """Verifica se a questão foi publicada nos últimos 1 dia."""
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
     def total_votes(self):
-        votes = 0
-        choices = self.choice_set.all()
-        # Faça um laço para somar todos os votos.
-        return votes
+        """Retorna o total de votos da questão."""
+        return sum(choice.votes for choice in self.choice_set.all())
 
     def has_votes(self):
-        # Utilize uma condição para retornar se essa Questão tem ou não votos.
-        return False
+        """Indica se a questão possui ao menos um voto."""
+        return self.total_votes() > 0
 
 
 class Choice(models.Model):
